@@ -1,2 +1,120 @@
+let trades = JSON.parse(localStorage.getItem("trades")) || [];
 
+function addTrade(){
+
+    let pair = document.getElementById("pair").value;
+    let type = document.getElementById("type").value;
+    let result = document.getElementById("result").value;
+    let profit = Number(document.getElementById("profit").value);
+    let note = document.getElementById("note").value;
+
+
+    let trade = {
+        pair,
+        type,
+        result,
+        profit,
+        note,
+        date:new Date().toLocaleDateString()
+    };
+
+
+    trades.push(trade);
+
+    localStorage.setItem("trades",JSON.stringify(trades));
+
+    displayTrades();
+    updateStats();
+
+    document.getElementById("tradeForm").reset();
+}
+
+
+
+function displayTrades(){
+
+    let table = document.getElementById("tradeTable");
+
+    table.innerHTML="";
+
+
+    trades.forEach((trade,index)=>{
+
+        table.innerHTML += `
+
+        <tr>
+        <td>${trade.date}</td>
+        <td>${trade.pair}</td>
+        <td>${trade.type}</td>
+        <td>${trade.result}</td>
+        <td>$${trade.profit}</td>
+        <td>
+        <button onclick="deleteTrade(${index})">
+        Delete
+        </button>
+        </td>
+        </tr>
+
+        `;
+
+    });
+
+}
+
+
+
+
+function deleteTrade(index){
+
+    trades.splice(index,1);
+
+    localStorage.setItem("trades",JSON.stringify(trades));
+
+    displayTrades();
+    updateStats();
+
+}
+
+
+
+
+function updateStats(){
+
+    let total = trades.length;
+
+    let wins = trades.filter(t=>t.result=="Win").length;
+
+    let losses = trades.filter(t=>t.result=="Loss").length;
+
+
+    let profit = trades.reduce((sum,t)=>sum+t.profit,0);
+
+
+    let winRate = total>0 ?
+    ((wins/total)*100).toFixed(2)
+    :0;
+
+
+    document.getElementById("totalTrades").innerHTML=total;
+
+    document.getElementById("wins").innerHTML=wins;
+
+    document.getElementById("losses").innerHTML=losses;
+
+    document.getElementById("profit").innerHTML="$"+profit;
+
+    document.getElementById("winRate").innerHTML=winRate+"%";
+
+}
+
+
+
+
+window.onload=function(){
+
+    displayTrades();
+
+    updateStats();
+
+};
 
