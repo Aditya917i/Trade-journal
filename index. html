@@ -1,13 +1,22 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Trade Journal Pro</title>
 
 <link rel="stylesheet" href="style.css">
 
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1f6feb">
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+
 
 </head>
 <body>
@@ -137,6 +146,14 @@
 </section>
 
 <script src="script.js"></script>
-
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js")
+      .then(() => console.log("Service Worker Registered"))
+      .catch(err => console.log(err));
+  });
+}
+</script>
 </body>
 </html>
